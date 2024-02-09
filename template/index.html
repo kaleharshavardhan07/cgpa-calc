@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>CGPA CALCULATOR</h1>
+        <form action="/calculate1" method="post">
+            <input type="text" name="crt-cgpa" placeholder="ENTER YOUR CURRENT CGPA" required>
+            <input type="text" name="crt-crd" placeholder="ENTER TOTAL CREDIT OF ALL SEM YOU HAVE COMPLETED" required>
+            <input type="text" name="tgt-cgpa" placeholder="TARGET / EXPECTED CGPA" required>
+            <input type="text" name="sm-crd" placeholder="ENTER TOTAL CREDIT OF CURRENT SEM" required>
+            <button type="submit">Calculate</button>
+        </form>
+        {% if target_cgpa is not none %}
+        <h2> YOU HAVE TO GET SGPA OF : {{ target_cgpa }} OR MORE THAN THIS</h2>
+        {% endif %}
+    </div>
+
+    <section>OR</section>
+
+    <div class="container">
+        <h1>CGPA CALCULATOR</h1>
+        <form action="/calculate_sgpa" method="post">
+            <label for="num_semesters">Select Number of Semesters Completed:</label>
+            <select id="num_semesters" name="num_semesters" onchange="toggleSemesters()" required>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <!-- Add more options as needed -->
+            </select>
+
+            <div id="semester-container"></div>
+            <input type="text" name="tgt-cgpa1" placeholder="TARGET / EXPECTED CGPA" required>
+            <input type="text" name="sm-crd1" placeholder="ENTER TOTAL CREDIT OF CURRENT SEM" required>
+
+            <button type="submit">Calculate SGPA</button>
+            {% if expt_sgpa is not none %}
+            <h2> YOU HAVE TO GET SGPA OF : {{ expt_sgpa  }} OR MORE THAN THIS</h2>
+            {% endif %}
+            
+        </form>
+        <script>
+            function toggleSemesters() {
+                var numSemesters = document.getElementById('num_semesters').value;
+                var semesterContainer = document.getElementById('semester-container');
+
+                
+                semesterContainer.innerHTML = '';
+
+                for (var i = 1; i <= numSemesters; i++) {
+                    var div = document.createElement('div');
+                    div.className = 'semester-section';
+                    div.style.display = (i >= 1 && i <= 9) ? 'block' : 'none';
+
+                    div.innerHTML = `
+                    <label for="sgpa_semester_${i}">SGPA for Semester ${i}:</label>
+                    <input type="text" name="sgpa_semester_${i}" placeholder="Enter SGPA" required>
+    
+                    <label for="credit_semester_${i}">Credits for Semester ${i}:</label>
+                    <input type="text" name="credit_semester_${i}" min="1" required>
+                `;
+
+                    semesterContainer.appendChild(div);
+                }
+            }
+        </script>
+    </div>
+
+</body>
+
+</html>
